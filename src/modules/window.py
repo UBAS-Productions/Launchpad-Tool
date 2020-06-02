@@ -5,7 +5,8 @@ The window handler.
 from sys import argv
 
 from PyQt5.QtWidgets import QApplication, QWidget
-
+# TODO:
+#   Launchpad selection
 
 class Window:
     def __init__(self, width, height):
