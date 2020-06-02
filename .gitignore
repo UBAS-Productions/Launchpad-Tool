@@ -1,6 +1,7 @@
 #IDE
 .vscode/
 .idea/
-
 #ENV
 venv/
+#reference
+reference/
