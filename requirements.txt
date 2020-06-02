@@ -1,0 +1,2 @@
+PyQt5~=5.15.0
+launchpad-py~=0.8.1
