@@ -11,11 +11,19 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(640, 480)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+class Ui_window(object):
+    def setupUi(self, window):
+        window.setObjectName("window")
+        window.resize(640, 480)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("../icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        window.setWindowIcon(icon)
+        self.centralwidget = QtWidgets.QWidget(window)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
+        self.centralwidget.setSizePolicy(sizePolicy)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(9, 9, 621, 459))
@@ -86,28 +94,28 @@ class Ui_MainWindow(object):
         self.audiofiles.setAcceptDrops(True)
         self.audiofiles.setObjectName("audiofiles")
         self.horizontalLayout_2.addWidget(self.audiofiles)
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        window.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(window)
         self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+        window.setStatusBar(self.statusbar)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.retranslateUi(window)
+        QtCore.QMetaObject.connectSlotsByName(window)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, window):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.buttonnumber.setText(_translate("MainWindow", "Button 1"))
-        self.label.setText(_translate("MainWindow", "Audiofile:"))
-        self.label_3.setText(_translate("MainWindow", "Volume:"))
-        self.label_2.setText(_translate("MainWindow", "Activated:"))
+        window.setWindowTitle(_translate("window", "Launchpad Toolbox"))
+        self.buttonnumber.setText(_translate("window", "Button 1"))
+        self.label.setText(_translate("window", "Audiofile:"))
+        self.label_3.setText(_translate("window", "Volume:"))
+        self.label_2.setText(_translate("window", "Activated:"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    window = QtWidgets.QMainWindow()
+    ui = Ui_window()
+    ui.setupUi(window)
+    window.show()
     sys.exit(app.exec_())
