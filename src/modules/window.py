@@ -2,9 +2,13 @@
 
 The window handler.
 """
-from sys import argv
+from sys import argv, exit
 
-from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5 import QtWidgets
+
+from modules.ui import Ui_window
+
+
 # TODO:
 #   Launchpad selection
 
@@ -12,8 +16,8 @@ class Window:
     def __init__(self, width, height):
         self.app = QApplication(argv)
         self.widget = QWidget()
-        self.__width = width
-        self.__height = height
+        self.width = width
+        self.height = height
 
     @property
     def height(self):
@@ -34,11 +38,9 @@ class Window:
         self.widget.resize(self.__width, self.__height)
 
 
-if __name__ == '__main__':
-    app = QApplication(argv)
-
-    w = QWidget()
-    w.resize(250, 150)
-    w.move(300, 300)
-    w.setWindowTitle('')
-    w.show()
+app = QtWidgets.QApplication(argv)
+window = QtWidgets.QMainWindow()
+ui = Ui_window()
+ui.setupUi(window)
+window.show()
+exit(app.exec_())
