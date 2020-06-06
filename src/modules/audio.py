@@ -18,7 +18,7 @@ class Audio:
         self.playing = False
 
 if __name__ == "__main__":
-    path = os.path.join(os.getcwd(), "ChairMusic.mp3")
+    path = os.path.join(os.getcwd(), "file.mp3")
     print(path)
     test = Audio(path)
     test.play()
