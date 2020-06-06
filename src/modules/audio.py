@@ -1,6 +1,7 @@
+import os
 
 from pydub import AudioSegment
-import os
+
 
 class Audio:
     def __init__(self, audiofile):
@@ -13,9 +14,10 @@ class Audio:
             AudioSegment.from_file(self.audiofile, self.audiofile.split(".")[-1])
         except RuntimeWarning:
             quit()
-            # TODO: install ffmpeg
+
     def stop(self):
         self.playing = False
+
 
 if __name__ == "__main__":
     path = os.path.join(os.getcwd(), "file.mp3")
@@ -24,4 +26,3 @@ if __name__ == "__main__":
     test.play()
 # button1audio = Audio(path)
 # button1audio.play()
-

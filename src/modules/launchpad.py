@@ -3,6 +3,7 @@
 The Launchpad handler.
 """
 import launchpad_py as launchpad
+
 lp = launchpad.Launchpad()
 lp.Open()
 lp.Reset()
@@ -12,4 +13,3 @@ lp.Reset()
 #   Button press: Start/Stop
 #   Button hold: Loop/Unloop
 #   Button double press: Enable/Disable (maybe?)
-

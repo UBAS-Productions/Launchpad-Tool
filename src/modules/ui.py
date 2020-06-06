@@ -161,7 +161,8 @@ class Ui_window(object):
         self.configbuttons = QtWidgets.QDialogButtonBox(self.horizontalLayoutWidget)
         self.configbuttons.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.configbuttons.setOrientation(QtCore.Qt.Horizontal)
-        self.configbuttons.setStandardButtons(QtWidgets.QDialogButtonBox.Open|QtWidgets.QDialogButtonBox.Reset|QtWidgets.QDialogButtonBox.Save)
+        self.configbuttons.setStandardButtons(
+            QtWidgets.QDialogButtonBox.Open | QtWidgets.QDialogButtonBox.Reset | QtWidgets.QDialogButtonBox.Save)
         self.configbuttons.setCenterButtons(True)
         self.configbuttons.setObjectName("configbuttons")
         self.verticalLayout_2.addWidget(self.configbuttons)
@@ -199,6 +200,7 @@ class Ui_window(object):
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     window = QtWidgets.QMainWindow()
     ui = Ui_window()
