@@ -21,6 +21,10 @@ class Window:
 
     @property
     def height(self):
+        """
+
+        :return:
+        """
         return self.__height
 
     @height.setter
@@ -30,6 +34,10 @@ class Window:
 
     @property
     def width(self):
+        """
+
+        :return:
+        """
         return self.__width
 
     @width.setter
