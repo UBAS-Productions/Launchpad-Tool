@@ -1,2 +1,4 @@
 PyQt5~=5.15.0
 launchpad-py~=0.8.1
+pydub~=0.24.1
+simpleaudio~=1.0.4
