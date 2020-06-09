@@ -222,7 +222,7 @@
             <item row="1" column="1">
              <widget class="QDoubleSpinBox" name="volume">
               <property name="maximum">
-               <double>100.000000000000000</double>
+               <double>200.000000000000000</double>
               </property>
               <property name="value">
                <double>100.000000000000000</double>

@@ -108,7 +108,7 @@ class Ui_window(object):
         self.label_3.setObjectName("label_3")
         self.buttonsettings.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_3)
         self.volume = QtWidgets.QDoubleSpinBox(self.frame)
-        self.volume.setMaximum(100.0)
+        self.volume.setMaximum(200.0)
         self.volume.setProperty("value", 100.0)
         self.volume.setObjectName("volume")
         self.buttonsettings.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.volume)
@@ -161,8 +161,7 @@ class Ui_window(object):
         self.configbuttons = QtWidgets.QDialogButtonBox(self.horizontalLayoutWidget)
         self.configbuttons.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.configbuttons.setOrientation(QtCore.Qt.Horizontal)
-        self.configbuttons.setStandardButtons(
-            QtWidgets.QDialogButtonBox.Open | QtWidgets.QDialogButtonBox.Reset | QtWidgets.QDialogButtonBox.Save)
+        self.configbuttons.setStandardButtons(QtWidgets.QDialogButtonBox.Open|QtWidgets.QDialogButtonBox.Reset|QtWidgets.QDialogButtonBox.Save)
         self.configbuttons.setCenterButtons(True)
         self.configbuttons.setObjectName("configbuttons")
         self.verticalLayout_2.addWidget(self.configbuttons)
@@ -200,7 +199,6 @@ class Ui_window(object):
 
 if __name__ == "__main__":
     import sys
-
     app = QtWidgets.QApplication(sys.argv)
     window = QtWidgets.QMainWindow()
     ui = Ui_window()
