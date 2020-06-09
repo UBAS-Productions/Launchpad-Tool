@@ -2,8 +2,11 @@ import os
 
 from pydub import AudioSegment
 from pydub.playback import _play_with_simpleaudio as play
+from simpleaudio.functionchecks import LeftRightCheck
 
 
+def audiotest():
+    LeftRightCheck.run(0)
 class Audio:
     """
 
@@ -12,9 +15,9 @@ class Audio:
 
     def __init__(self, audiofile, volume=100):
         self.output = None
+        self.audiofile = audiofile
         self.src_audio = AudioSegment.from_file(self.audiofile, self.audiofile.split(".")[-1])
         self.volume = volume
-        self.audiofile = audiofile
 
     def play(self):
         """
@@ -61,7 +64,9 @@ class Audio:
         :type volume: int
         """
         self.__volume = volume
-        self.audio = self.src_audio * (volume / 100)
+        print(self.src_audio.dBFS)
+        self.audio = self.src_audio + ((self.src_audio.dBFS * (100 / volume)) - self.src_audio.dBFS)
+        print(self.audio.dBFS)
 
 
 if __name__ == "__main__":
@@ -69,10 +74,10 @@ if __name__ == "__main__":
 
     path = os.path.join(os.getcwd(), "file.mp3")
     print(path)
-    test = Audio(path)
+    test = Audio(path, 200)
     test.play()
     print(test.playing)
-    time.sleep(5)
+    time.sleep(1000)
     test.stop()
 
 # button1audio = Audio(path)
