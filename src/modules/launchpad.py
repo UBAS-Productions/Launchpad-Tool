@@ -4,10 +4,12 @@ The Launchpad handler.
 """
 import launchpad_py as launchpad
 
-lp = launchpad.Launchpad()
-lp.Open()
-lp.Reset()
-
+try:
+    lp = launchpad.Launchpad()
+    lp.Open()
+    lp.Reset()
+except:
+    pass
 # TODO:
 #   JSON Settings
 #   Button press: Start/Stop
