@@ -74,7 +74,7 @@ if __name__ == "__main__":
 
     path = os.path.join(os.getcwd(), "file.mp3")
     print(path)
-    test = Audio(path, 200)
+    test = Audio(path)
     test.play()
     print(test.playing)
     time.sleep(1000)
