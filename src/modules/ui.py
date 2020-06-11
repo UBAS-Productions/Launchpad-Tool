@@ -10,6 +10,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from modules.widgets import DropLine
+
 
 class Ui_window(object):
     def setupUi(self, window):
@@ -95,7 +97,12 @@ class Ui_window(object):
         self.label = QtWidgets.QLabel(self.horizontalLayoutWidget)
         self.label.setObjectName("label")
         self.buttonsettings.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label)
-        self.audiofile = QtWidgets.QLineEdit(self.horizontalLayoutWidget)
+        self.audiofile = DropLine(self.horizontalLayoutWidget)
+        self.audiofile.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.audiofile.setDragEnabled(True)
+        self.audiofile.setReadOnly(False)
+        self.audiofile.setCursorMoveStyle(QtCore.Qt.LogicalMoveStyle)
+        self.audiofile.setClearButtonEnabled(True)
         self.audiofile.setObjectName("audiofile")
         self.buttonsettings.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.audiofile)
         self.label_3 = QtWidgets.QLabel(self.horizontalLayoutWidget)
@@ -144,10 +151,13 @@ class Ui_window(object):
         self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_5)
-        self.configfile = QtWidgets.QLineEdit(self.horizontalLayoutWidget)
+        self.configfile = DropLine(self.horizontalLayoutWidget)
         font = QtGui.QFont()
         font.setPointSize(14)
         self.configfile.setFont(font)
+        self.configfile.setText("")
+        self.configfile.setDragEnabled(True)
+        self.configfile.setClearButtonEnabled(False)
         self.configfile.setObjectName("configfile")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.configfile)
         self.verticalLayout_2.addLayout(self.formLayout)
@@ -159,7 +169,21 @@ class Ui_window(object):
         self.configbuttons.setCenterButtons(True)
         self.configbuttons.setObjectName("configbuttons")
         self.verticalLayout_2.addWidget(self.configbuttons)
-        self.audiofiles = QtWidgets.QTreeView(self.horizontalLayoutWidget)
+        self.formLayout_2 = QtWidgets.QFormLayout()
+        self.formLayout_2.setContentsMargins(-1, -1, -1, 0)
+        self.formLayout_2.setObjectName("formLayout_2")
+        self.addbutton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.addbutton.setObjectName("addbutton")
+        self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.addbutton)
+        self.addaudio = DropLine(self.horizontalLayoutWidget)
+        self.addaudio.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.addaudio.setDragEnabled(True)
+        self.addaudio.setReadOnly(False)
+        self.addaudio.setClearButtonEnabled(True)
+        self.addaudio.setObjectName("addaudio")
+        self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.addaudio)
+        self.verticalLayout_2.addLayout(self.formLayout_2)
+        self.audiofiles = QtWidgets.QListWidget(self.horizontalLayoutWidget)
         self.audiofiles.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.audiofiles.setAcceptDrops(True)
         self.audiofiles.setFrameShape(QtWidgets.QFrame.WinPanel)
@@ -170,7 +194,6 @@ class Ui_window(object):
         self.audiofiles.setDragEnabled(True)
         self.audiofiles.setDragDropMode(QtWidgets.QAbstractItemView.DragDrop)
         self.audiofiles.setDefaultDropAction(QtCore.Qt.CopyAction)
-        self.audiofiles.setSortingEnabled(True)
         self.audiofiles.setObjectName("audiofiles")
         self.verticalLayout_2.addWidget(self.audiofiles)
         self.horizontalLayout_2.addLayout(self.verticalLayout_2)
@@ -191,6 +214,9 @@ class Ui_window(object):
         self.label_2.setText(_translate("window", "Activated:"))
         self.label_4.setText(_translate("window", "Launchpad:"))
         self.label_5.setText(_translate("window", "Configuration:"))
+        self.addbutton.setText(_translate("window", "Add Audiofile"))
+        self.addaudio.setText(_translate("window", "Audiofile"))
+        self.audiofiles.setSortingEnabled(True)
 
 
 if __name__ == "__main__":
