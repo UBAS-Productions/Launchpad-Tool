@@ -362,7 +362,7 @@
          <item row="0" column="1">
           <widget class="QLineEdit" name="addaudio">
            <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
+            <enum>Qt::StrongFocus</enum>
            </property>
            <property name="text">
             <string>Audiofile</string>
@@ -410,7 +410,7 @@
           <enum>QAbstractItemView::DragDrop</enum>
          </property>
          <property name="defaultDropAction">
-          <enum>Qt::CopyAction</enum>
+          <enum>Qt::MoveAction</enum>
          </property>
          <property name="sortingEnabled">
           <bool>true</bool>

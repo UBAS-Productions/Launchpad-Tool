@@ -7,6 +7,7 @@ from os import path
 from sys import argv, exit
 
 from PyQt5 import QtWidgets
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication
 
 from modules.ui import Ui_window
@@ -18,9 +19,9 @@ from modules.ui import Ui_window
 #   ✓ Drag'n'Drop
 #   Volume apply
 #   Audiofilelist
-#   Active
+#   Activesettings
 #   Configfiles
-
+#   Buttonmatrix
 class Window:
     def __init__(self, width, height):
         self.app = QApplication(argv)
@@ -31,20 +32,32 @@ class Window:
         self.ui.configbuttons.buttons()[0].clicked.connect(self.saveconfig)
         self.ui.configbuttons.buttons()[1].clicked.connect(self.openconfig)
         self.ui.configbuttons.buttons()[2].clicked.connect(self.resetconfig)
+        self.ui.addbutton.clicked.connect(self.addaudio)
+        self.ui.volume.editingFinished.connect(self.edit)
+        self.ui.activated.clicked.connect(self.edit)
         self.config = {}
-        self.__button = 1
-        self.launchpad = None
         self.changed = False
+        self.button = 16
+        self.launchpad = None
         self.__width = width
         self.__height = height
         self.width = width
         self.height = height
         self.running = True
-        # self.handler = Thread(target=self.__handler, name="windowhandler")
+
+    def edit(self):
+        self.config.update({
+            int(self.ui.buttonnumber.text().replace("Button ", "")): [
+                path.abspath(self.ui.audiofile.text().replace("file://", "").replace("\r", "").replace("\n", "")),
+                self.ui.volume.value(),
+                self.ui.activated.isChecked()
+            ]
+        })
 
     def addaudio(self):
-        self.ui.audiofiles.addItem(
-            path.abspath(self.ui.addaudio.text().replace("file://", "").replace("\r", "").replace("\n", "")))
+        file = path.abspath(self.ui.addaudio.text().replace("file://", "").replace("\r", "").replace("\n", ""))
+        if path.isfile(file) and len(self.ui.audiofiles.findItems(file, Qt.MatchExactly)) == 0:
+            self.ui.audiofiles.addItem(file)
 
     def selectlaunchpad(self):
         self.launchpad = self.ui.launchpadselection.currentIndex()
@@ -56,7 +69,6 @@ class Window:
                 open(
                     path.abspath(
                         self.ui.configfile.text().replace("file://", "").replace("\r", "").replace("\n", ""))))
-            self.changed = True
         except:
             pass
 
@@ -66,13 +78,11 @@ class Window:
                 path.abspath(self.ui.configfile.text().replace("file://", "").replace("\r", "").replace("\n", "")),
                 "w"),
                       sort_keys=True)
-            self.changed = True
         except:
             pass
 
     def resetconfig(self):
         self.config = {}
-        self.changed = True
 
     @property
     def launchpads(self):
@@ -82,14 +92,14 @@ class Window:
     def launchpads(self, launchpads):
         self.ui.launchpadselection.addItems(launchpads)
 
-    @property
-    def button(self):
-        return self.__button
-
-    @button.setter
-    def button(self, button):
-        self.__button = button
-        self.ui.buttonnumber.setText(f"Button {button}")
+    def setbutton(self, button):
+        if button is not None:
+            self.button = button
+            self.ui.buttonnumber.setText(f"Button {button}")
+            c = self.config.get(button, ["", 100.0, True])
+            self.ui.audiofile.setText(c[0])
+            self.ui.volume.setValue(c[1])
+            self.ui.activated.setChecked(c[2])
 
     @property
     def height(self):
@@ -124,6 +134,7 @@ class Window:
     #                 print(self.ui.configfile.text())
     #         else:
     #             exit(1)
+
 
 if __name__ == "__main__":
     w = Window(640, 480)

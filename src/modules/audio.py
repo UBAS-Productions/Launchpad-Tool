@@ -1,13 +1,31 @@
+from threading import Thread
+
 from pydub import AudioSegment
 from pydub.playback import _play_with_simpleaudio as play
 from simpleaudio.functionchecks import LeftRightCheck
 
 
-def audiotest():
+def __audiotest():
     LeftRightCheck.run(0)
 
 
-class Audio:
+instances = []
+config = {}
+
+
+def action(button):
+    print(config)
+    c = config.get(button, ["", 100.0, False])
+    if c[2]:
+        for instance in instances:
+            if button in instance:
+                instance[1].stop()
+                instances.remove(instance)
+                return
+        instances.append([button, Audio(c[0], c[1])])
+
+
+class Audio(Thread):
     """
 
     Audio handler.
@@ -18,7 +36,7 @@ class Audio:
         self.audiofile = audiofile
         self.src_audio = AudioSegment.from_file(self.audiofile, self.audiofile.split(".")[-1])
         self.volume = volume
-
+        self.play()
     def play(self):
         """
 
@@ -64,6 +82,4 @@ class Audio:
         :type volume: int
         """
         self.__volume = volume
-        print(self.src_audio.dBFS)
         self.audio = self.src_audio + ((self.src_audio.dBFS * (100 / volume)) - self.src_audio.dBFS)
-        print(self.audio.dBFS)

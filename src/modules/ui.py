@@ -10,7 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from modules.widgets import DropLine
+from modules.widgets import DropLine, ItemList
 
 
 class Ui_window(object):
@@ -151,7 +151,7 @@ class Ui_window(object):
         self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_5)
-        self.configfile = DropLine(self.horizontalLayoutWidget)
+        self.configfile = QtWidgets.QLineEdit(self.horizontalLayoutWidget)
         font = QtGui.QFont()
         font.setPointSize(14)
         self.configfile.setFont(font)
@@ -176,14 +176,14 @@ class Ui_window(object):
         self.addbutton.setObjectName("addbutton")
         self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.addbutton)
         self.addaudio = DropLine(self.horizontalLayoutWidget)
-        self.addaudio.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.addaudio.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.addaudio.setDragEnabled(True)
         self.addaudio.setReadOnly(False)
         self.addaudio.setClearButtonEnabled(True)
         self.addaudio.setObjectName("addaudio")
         self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.addaudio)
         self.verticalLayout_2.addLayout(self.formLayout_2)
-        self.audiofiles = QtWidgets.QListWidget(self.horizontalLayoutWidget)
+        self.audiofiles = ItemList(self.horizontalLayoutWidget)
         self.audiofiles.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.audiofiles.setAcceptDrops(True)
         self.audiofiles.setFrameShape(QtWidgets.QFrame.WinPanel)
@@ -193,7 +193,7 @@ class Ui_window(object):
         self.audiofiles.setTabKeyNavigation(True)
         self.audiofiles.setDragEnabled(True)
         self.audiofiles.setDragDropMode(QtWidgets.QAbstractItemView.DragDrop)
-        self.audiofiles.setDefaultDropAction(QtCore.Qt.CopyAction)
+        self.audiofiles.setDefaultDropAction(QtCore.Qt.MoveAction)
         self.audiofiles.setObjectName("audiofiles")
         self.verticalLayout_2.addWidget(self.audiofiles)
         self.horizontalLayout_2.addLayout(self.verticalLayout_2)
@@ -208,7 +208,7 @@ class Ui_window(object):
     def retranslateUi(self, window):
         _translate = QtCore.QCoreApplication.translate
         window.setWindowTitle(_translate("window", "Launchpad Toolbox"))
-        self.buttonnumber.setText(_translate("window", "Button 1"))
+        self.buttonnumber.setText(_translate("window", "Button 16"))
         self.label.setText(_translate("window", "Audiofile:"))
         self.label_3.setText(_translate("window", "Volume:"))
         self.label_2.setText(_translate("window", "Activated:"))
