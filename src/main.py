@@ -36,8 +36,10 @@ w.launchpads = lp.launchpads
 lp.config = w.config
 lp.launchpad = w.launchpad
 lp.running = running
+lp.instances = audio.instances
 lp.action = audio.action
 lp.setbutton = w.setbutton
+audio.editmode = w.editmode
 audio.config = w.config
 # Audiotest
 audiotest = Thread(name="audiotest", target=__audiotest)
@@ -46,8 +48,12 @@ audiotest = Thread(name="audiotest", target=__audiotest)
 update = Thread(name="update", target=__update)
 update.start()
 lp.handler.start()
+lp.led_handler.start()
 # Exit on command
-exitcode = w.app.exec_()
+try:
+    exitcode = w.app.exec_()
+except:
+    exitcode = 1
 running = False
 cleanup()
 exit(exitcode)
