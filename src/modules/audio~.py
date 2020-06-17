@@ -1,5 +1,7 @@
 from threading import Thread
 
+import numpy as np
+from pydub import AudioSegment
 from pydub.playback import _play_with_simpleaudio as play
 from simpleaudio.functionchecks import LeftRightCheck
 
@@ -8,50 +10,41 @@ def __audiotest():
     LeftRightCheck.run(0)
 
 
-instances = {}
+instances = np.array([])
 config = {}
 editmode = False
 
 
 def action(button):
     global instances
+    # print(config)
     if not editmode:
-        c = config.get(button, ["", 100.0, False, False, None])
-        # print(c)
-        print("---")
-        print(1)
-        if c[2]:
-            print(2)
-            if len(instances):
-                for btn, instance in instances.items():
-                    print(3)
-                    if button == btn and not c[3]:
-                        print(4)
-                        instance.stop()
-                        print(5)
-                        instances.pop(btn)
-                        print(6)
+        c = config.get(button, ["", 100.0, False, False])
+        # print(c[2] and c[0] != "" and not editmode)
+        instances.view(instances.dtype).sort(order=['f0'], axis=0)
+        if c[2] and c[0] != "":
+            try:
+                with np.where(instances == button)[0][0] as i:
+                    if button in instances[i] and not c[3]:
+                        instances[i][1].stop()
                         return
+            except:
                 pass
-            print(7)
-            instances.update({button: Audio(c[4], c[1])})
-            print(8)
-            # print(instances[-1][1].playing)
+            tmp = Audio(c[0], c[1])
+            # tmp.start()
+            instances = np.append(instances, [button, tmp])
 
-
-# def JITInitialiser(audiofile):
 
 class Audio(Thread):
-    def __init__(self, src_audio, volume=100):
+    def __init__(self, audiofile, volume=100):
         Thread.__init__(self)
         self.output = None
-        self.src_audio = src_audio
+        self.audiofile = audiofile
+        self.src_audio = AudioSegment.from_file(self.audiofile, self.audiofile.split(".")[-1])
         self.volume = volume
         self.start()
 
     def run(self):
-        # while self.src_audio is None:
-        #     pass
         self.play()
         self.output.wait_done()
         self.remove()
@@ -59,21 +52,21 @@ class Audio(Thread):
     def play(self):
         try:
             self.output = play(self.audio)
-        except:
-            pass
+        except RuntimeWarning:
+            quit()
 
     def stop(self):
         try:
             self.output.stop()
+            self.remove()
         except:
             pass
 
     def remove(self):
         global instances
-        for btn, instance in instances.items():
-            if instance == self:
-                instances.pop(btn)
+        instances = np.delete(instances, np.where(instances[1] == self))
 
+    @property
     def playing(self):
         try:
             return self.output.is_playing()
