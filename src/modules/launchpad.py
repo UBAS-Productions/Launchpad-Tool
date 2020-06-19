@@ -3,7 +3,7 @@
 The Launchpad handler.
 """
 from threading import Thread
-from time import sleep
+from time import sleep, time
 
 import launchpad_py as launchpad
 from pygame import midi
@@ -36,6 +36,7 @@ class Launchpad:
         self.button = 16
         self.running = True
         self.handler = Thread(name="launchpadhandler", target=self.__handler)
+        self.led_handler = Thread(name="ledhandler", target=self.__led_handler)
         self.setbutton = None
         self.action = None
 
@@ -69,6 +70,37 @@ class Launchpad:
         except:
             exit(0)
         exit(0)
+
+    def __led_handler(self):
+        while True:
+            try:
+                # self.lp.Reset()
+                for btn, c in self.config.items():
+                    if c[0] != "" and c[2]:
+                        try:
+                            for instance in self.instances:
+                                if instance[0] == btn:
+                                    if instance[1][-1].playing():
+                                        b = self.blink.get(btn, [0, 1])
+                                        if b[0] < time() - 1:
+                                            if b[1] == 1:
+                                                self.lp.LedCtrlXY(btn % 16, btn // 16 + 1, 0, 3)
+                                                self.blink.update({btn: [time(), 2]})
+                                            elif b[1] == 2:
+                                                self.lp.LedCtrlXY(btn % 16, btn // 16 + 1, 0, 0)
+                                                self.blink.update({btn: [time(), 1]})
+                                    else:
+                                        self.lp.LedCtrlXY(btn % 16, btn // 16 + 1, 0, 3)
+                                    break
+                        except:
+                            self.lp.LedCtrlXY(btn % 16, btn // 16 + 1, 0, 3)
+                    elif not c[2]:
+                        self.lp.LedCtrlXY(btn % 16, btn // 16 + 1, 3, 0)
+                    else:
+                        self.lp.LedCtrlXY(btn % 16, btn // 16 + 1, 0, 0)
+                sleep(0.2)
+            except:
+                pass
 
     @property
     def launchpads(self):

@@ -40,13 +40,10 @@ class Audio:  # Thread):
         self.volume = volume
         self.play()
     def play(self):
-        """
-
-        """
         try:
             self.output = play(self.audio)
-        except RuntimeWarning:
-            quit()
+        except:
+            pass
 
     def stop(self):
         """

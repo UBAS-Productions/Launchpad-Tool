@@ -46,6 +46,7 @@ audiotest = Thread(name="audiotest", target=__audiotest)
 update = Thread(name="update", target=__update)
 update.start()
 lp.handler.start()
+lp.led_handler.start()
 # Exit on command
 exitcode = w.app.exec_()
 running = False

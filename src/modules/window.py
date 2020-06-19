@@ -49,7 +49,8 @@ class Window:
     def edit(self):
         self.config.update({
             int(self.ui.buttonnumber.text().replace("Button ", "")): [
-                path.abspath(self.ui.audiofile.text().replace("file://", "").replace("\r", "").replace("\n", "")),
+                path.abspath(self.ui.audiofile.text().replace("file://", "").replace("\r", "").replace("\n",
+                                                                                                       "")) if self.ui.audiofile.text() != "" else "",
                 self.ui.volume.value(),
                 self.ui.activated.isChecked(),
                 self.ui.replay.isChecked()
