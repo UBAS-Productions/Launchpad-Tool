@@ -35,9 +35,10 @@ class Window:
         self.ui.addbutton.clicked.connect(self.addaudio)
         self.ui.volume.editingFinished.connect(self.edit)
         self.ui.activated.clicked.connect(self.edit)
+        self.ui.replay.clicked.connect(self.edit)
         self.config = {}
         self.changed = False
-        self.button = 16
+        self.button = 0
         self.launchpad = None
         self.__width = width
         self.__height = height
@@ -50,7 +51,8 @@ class Window:
             int(self.ui.buttonnumber.text().replace("Button ", "")): [
                 path.abspath(self.ui.audiofile.text().replace("file://", "").replace("\r", "").replace("\n", "")),
                 self.ui.volume.value(),
-                self.ui.activated.isChecked()
+                self.ui.activated.isChecked(),
+                self.ui.replay.isChecked()
             ]
         })
 
@@ -86,7 +88,7 @@ class Window:
 
     @property
     def launchpads(self):
-        pass
+        return
 
     @launchpads.setter
     def launchpads(self, launchpads):
@@ -95,11 +97,12 @@ class Window:
     def setbutton(self, button):
         if button is not None:
             self.button = button
-            self.ui.buttonnumber.setText(f"Button {button}")
-            c = self.config.get(button, ["", 100.0, True])
+            self.ui.buttonnumber.setText("Button " + str(button))
+            c = self.config.get(button, ["", 100.0, True, False])
             self.ui.audiofile.setText(c[0])
             self.ui.volume.setValue(c[1])
             self.ui.activated.setChecked(c[2])
+            self.ui.replay.setChecked(c[3])
 
     @property
     def height(self):
@@ -126,14 +129,6 @@ class Window:
     def width(self, width):
         self.__width = width
         self.window.resize(self.__width, self.__height)
-
-    # def __handler(self):
-    #     while True:
-    #         if self.running:
-    #             if self.ui.configbuttons.:
-    #                 print(self.ui.configfile.text())
-    #         else:
-    #             exit(1)
 
 
 if __name__ == "__main__":
