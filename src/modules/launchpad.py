@@ -5,6 +5,8 @@ import launchpad_py as launchpad
 from pygame import midi
 
 midi.init()
+
+
 def SearchDevices(name, output=True, input=True):
     ret = []
 

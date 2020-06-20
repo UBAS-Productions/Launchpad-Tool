@@ -36,6 +36,7 @@ w.launchpads = lp.launchpads
 lp.config = w.config
 lp.launchpad = w.launchpad
 lp.running = running
+audio.running = running
 lp.instances = audio.instances
 lp.action = audio.action
 lp.setbutton = w.setbutton

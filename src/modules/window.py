@@ -54,14 +54,10 @@ class Window:
 
     def __edit(self):
         try:
-            # print(1)
             if self.ui.audiofile.text().replace("file://", "").replace("\r", "").replace("\n", "") != "":
-                # print(2)
                 c = self.config.get(int(self.ui.buttonnumber.text().replace("Button ", "")), [""])
-                # print(3)
                 if c[0] != path.abspath(
                         self.ui.audiofile.text().replace("file://", "").replace("\r", "").replace("\n", "")):
-                    # print(4)
                     self.config.update({
                         int(self.ui.buttonnumber.text().replace("Button ", "")): [
                             path.abspath(
@@ -77,9 +73,7 @@ class Window:
                                         "\n", "")).split(".")[-1])
                         ]
                     })
-                    # print(5)
                 else:
-                    # print(6)
                     self.config.update({
                         int(self.ui.buttonnumber.text().replace("Button ", "")): [
                             c[0],
@@ -89,11 +83,8 @@ class Window:
                             c[4]
                         ]
                     })
-                    # print(7)
             else:
-                # print(8)
                 del self.config[int(self.ui.buttonnumber.text().replace("Button ", ""))]
-            # print(9)
         except:
             pass
         # print(self.config)
