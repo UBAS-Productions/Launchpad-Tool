@@ -32,9 +32,10 @@ class Launchpad:
         self.config = {}
         self.__launchpad = None
         self.button = 0
-        self.instances = {}
+        self.instances = []
         self.blink = {}
         self.running = True
+        self.isopen = False
         self.handler = Thread(name="launchpadhandler", target=self.__handler)
         self.led_handler = Thread(name="led_handler", target=self.__led_handler)
         self.setbutton = None
@@ -46,13 +47,15 @@ class Launchpad:
         self.lp.LedAllOn()
         sleep(1)
         self.reset()
+        self.isopen = True
 
     def reset(self):
         self.lp.Reset()
 
     def close(self):
-        self.lp.Close()
         self.isopen = False
+        self.reset()
+        self.lp.Close()
 
     def get_button(self):
         button = self.lp.ButtonStateXY()
@@ -61,39 +64,66 @@ class Launchpad:
     def __handler(self):
         try:
             while self.running:
-                button = self.get_button()
-                if button is not None:
-                    self.button = button[0] + (button[1] - 1) * 16
-                    # print(self.button)
-                    Thread(name=self.button, target=self.action, args=[self.button]).start()
-                    Thread(name="setbutton", target=self.setbutton, args=[self.button]).start()
-                sleep(0.01)
+                while self.isopen:
+                    button = self.get_button()
+                    if button is not None:
+                        self.button = button[0] + (button[1] - 1) * 16
+                        # print(self.button)
+                        Thread(name=self.button, target=self.action, args=[self.button]).start()
+                        Thread(name="setbutton", target=self.setbutton, args=[self.button]).start()
+                    sleep(0.01)
         except:
             exit(0)
         exit(0)
 
     def __led_handler(self):
-        while True:
+        while self.running:
+            while self.isopen:
+                try:
+                    l = []
+                    # self.lp.Reset()
+                    for btn, c in self.config.items():
+                        if c != ["", 100.0, True, False]:
+                            # print(c)
+                            l.append(btn)
+                            Thread(target=self.led, args=[btn, c]).start()
+                    remove = []
+                    for x in range(8):
+                        for y in range(8):
+                            remove.append(x + y * 16)
+                    for led in remove:
+                        if not led in l:
+                            self.lp.LedCtrlRaw(led, 0, 0)
+                    sleep(0.05)
+                except:
+                    pass
+
+    def led(self, btn, c):
+        if c[2]:
             try:
-                self.lp.Reset()
-                for btn, c in self.config.items():
-                    if c[0] != "":
-                        if c[2]:
-                            try:
-                                if self.instances.get(btn, None).playing():
-                                    if self.blink.get(btn, [1, 1])[0] < time() - 1:
-                                        self.lp.LedCtrlXY(btn % 16, btn // 16 + 1, 0, 3)
-                                        self.blink.update({btn: [time(), 2]})
-                                    elif self.blink.get(btn, [1, 2])[0] < time() - 1:
-                                        self.lp.LedCtrlXY(btn % 16, btn // 16 + 1, 0, 0)
-                                        self.blink.update({btn: [time(), 1]})
-                            except:
-                                self.lp.LedCtrlXY(btn % 16, btn // 16 + 1, 0, 3)
-                        else:
-                            self.lp.LedCtrlXY(btn % 16, btn // 16 + 1, 3, 0)
-                sleep(0.2)
+                tmp = False
+                for instance in self.instances:
+                    # print(instance, btn)
+                    if instance[0] == btn and len(instance[1]) > 0:
+                        if instance[1][-1].playing:
+                            tmp = True
+                            b = self.blink.get(btn, [1, 1])
+                            # print(b)
+                            print(instance)
+                            print(b[0])
+                            if b[0] < time() - .5:
+                                if b[1] == 1:
+                                    self.lp.LedCtrlRaw(btn, 3, 3)
+                                    self.blink.update({btn: [time(), 2]})
+                                elif b[1] == 2:
+                                    self.lp.LedCtrlRaw(btn, 0, 0)
+                                    self.blink.update({btn: [time(), 1]})
+                if not tmp:
+                    self.lp.LedCtrlRaw(btn, 0, 3)
             except:
                 pass
+        else:
+            self.lp.LedCtrlXY(btn % 16, btn // 16 + 1, 3, 0)
 
     @property
     def launchpads(self):

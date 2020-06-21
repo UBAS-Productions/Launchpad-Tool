@@ -31,13 +31,15 @@ class Window:
         self.ui.configbuttons.buttons()[1].clicked.connect(self.openconfig)
         self.ui.configbuttons.buttons()[2].clicked.connect(self.resetconfig)
         self.ui.addbutton.clicked.connect(self.addaudio)
+        self.ui.audiofile.textChanged.connect(self.edit)
         self.ui.volume.valueChanged.connect(self.edit)
         self.ui.activated.clicked.connect(self.edit)
         self.ui.replay.clicked.connect(self.edit)
         self.ui.editmode.clicked.connect(self.__editmode)
         self.config = {}
         self.changed = False
-        self.button = 16
+        self.button = 0
+        self.buttonchanged = False
         self.launchpad = None
         self.editmode = False
         self.__width = width
@@ -54,7 +56,7 @@ class Window:
 
     def __edit(self):
         try:
-            if self.ui.audiofile.text().replace("file://", "").replace("\r", "").replace("\n", "") != "":
+            if self.ui.audiofile.text() != "":
                 c = self.config.get(int(self.ui.buttonnumber.text().replace("Button ", "")), [""])
                 if c[0] != path.abspath(
                         self.ui.audiofile.text().replace("file://", "").replace("\r", "").replace("\n", "")):
@@ -84,7 +86,14 @@ class Window:
                         ]
                     })
             else:
-                del self.config[int(self.ui.buttonnumber.text().replace("Button ", ""))]
+                self.config.update({
+                    int(self.ui.buttonnumber.text().replace("Button ", "")): [
+                        "",
+                        self.ui.volume.value(),
+                        self.ui.activated.isChecked(),
+                        self.ui.replay.isChecked()
+                    ]
+                })
         except:
             pass
         # print(self.config)
@@ -145,12 +154,16 @@ class Window:
         if button is not None:
             self.button = button
             self.ui.buttonnumber.setText(f"Button {button}")
-            c = self.config.get(button, ["", 100.0, True, False])
+            # c = self.config.get(button, ["", 100.0, True, False])
+            # print(c[0])
+            self.buttonchanged = True
+            # NOTE:
+            # Those are segmentation faults!
             # self.ui.audiofile.setText(c[0])
             # self.ui.volume.setValue(c[1])
             # self.ui.activated.setChecked(c[2])
             # self.ui.replay.setChecked(c[3])
-            pass
+
 
     @property
     def height(self):
@@ -169,14 +182,6 @@ class Window:
     def width(self, width):
         self.__width = width
         self.window.resize(self.__width, self.__height)
-
-    # def __handler(self):
-    #     while True:
-    #         if self.running:
-    #             if self.ui.configbuttons.:
-    #                 print(self.ui.configfile.text())
-    #         else:
-    #             exit(1)
 
 
 if __name__ == "__main__":

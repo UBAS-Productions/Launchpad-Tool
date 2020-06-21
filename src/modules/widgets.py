@@ -9,7 +9,6 @@ formats = [
     "ogg"
 ]
 
-
 class DropLine(QtWidgets.QLineEdit):
     def __init__(self, parent):
         super().__init__(parent)
@@ -21,7 +20,6 @@ class DropLine(QtWidgets.QLineEdit):
     def dropEvent(self, e):
         self.setText(e.mimeData().text())
         self.changed = True
-
 
 class ItemList(QtWidgets.QListWidget):
     def __init__(self, parent):

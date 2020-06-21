@@ -14,14 +14,24 @@ def cleanup():
 
 def __update():
     while running:
+        if not running:
+            exit(0)
+        audio.editmode = w.editmode
         if w.changed:
             lp.launchpad = w.launchpad
         if w.ui.addaudio.changed:
             w.addaudio()
             w.ui.addaudio.changed = False
-        if w.ui.audiofile.changed:
-            w.edit()
-            w.ui.audiofile.changed = False
+        # if w.ui.audiofile.changed:
+        #     w.edit()
+        #     w.ui.audiofile.changed = False
+        if w.buttonchanged:
+            c = w.config.get(w.button, ["", 100.0, True, False])
+            w.ui.audiofile.setText(c[0])
+            w.ui.volume.setValue(c[1])
+            w.ui.activated.setChecked(c[2])
+            w.ui.replay.setChecked(c[3])
+            w.buttonchanged = False
     exit(0)
 
 
@@ -56,5 +66,6 @@ try:
 except:
     exitcode = 1
 running = False
+audio.stopall()
 cleanup()
 exit(exitcode)
