@@ -59,7 +59,7 @@ class Launchpad:
 
     def get_button(self):
         button = self.lp.ButtonStateXY()
-        return button[0:2] if len(button) > 0 and button[2] and not button[0] > 7 and not button[1] < 1 else None
+        return button[0:2] if len(button) > 0 and button[2] and not button[0] > 7 and button[1] > 0 else None
 
     def __handler(self):
         try:
@@ -132,7 +132,7 @@ class Launchpad:
 
     @property
     def launchpad(self):
-        pass
+        return
 
     @launchpad.setter
     def launchpad(self, lp):

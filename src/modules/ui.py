@@ -49,7 +49,7 @@ class Ui_window(object):
         font.setPointSize(10)
         window.setFont(font)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("../../src (copy)/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         window.setWindowIcon(icon)
         window.setAutoFillBackground(True)
         window.setIconSize(QtCore.QSize(256, 256))

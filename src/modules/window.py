@@ -148,7 +148,7 @@ class Window:
 
     @property
     def launchpads(self):
-        pass
+        return
 
     @launchpads.setter
     def launchpads(self, launchpads):
@@ -165,7 +165,6 @@ class Window:
             # self.ui.volume.setValue(c[1])
             # self.ui.activated.setChecked(c[2])
             # self.ui.replay.setChecked(c[3])
-
     @property
     def height(self):
         return self.__height
