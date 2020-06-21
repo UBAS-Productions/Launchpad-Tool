@@ -53,10 +53,10 @@ lp.setbutton = w.setbutton
 audio.editmode = w.editmode
 audio.config = w.config
 # Audiotest
-audiotest = Thread(name="audiotest", target=__audiotest)
+audiotest = Thread(target=__audiotest)
 # audiotest.start()
 # Threads
-update = Thread(name="update", target=__update)
+update = Thread(target=__update)
 update.start()
 lp.handler.start()
 lp.led_handler.start()

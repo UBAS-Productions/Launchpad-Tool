@@ -23,17 +23,19 @@ running = True
 
 def action(button):
     c = config.get(button, ["", 100.0, False, False])
+    # print(c)
     if c[2] and not editmode:
         for instance in instances:
             if button in instance and len(instance[1]) > 0:
-                if c[3]:
+                if c[3] and not c[0] == "":
                     instance[1].append(Audio(c[4], c[1]))
                 else:
                     for i in instance[1]:
                         i.stop()
                     instances.remove(instance)
                 return
-        instances.append([button, [Audio(c[4], c[1])]])
+        if not c[0] == "":
+            instances.append([button, [Audio(c[4], c[1])]])
 
 
 # def action(button):

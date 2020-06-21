@@ -12,13 +12,6 @@ from modules.ui import Ui_window
 
 
 # TODO:
-#   ✓ Launchpad selection
-#   ✓ Button assignment
-#   ✓ Drag'n'Drop
-#   ✓ Volume apply
-#   ✓ Audiofilelist
-#   ✓ Activesettings
-#   ✓ Configfiles
 #   Buttonmatrix
 class Window:
     def __init__(self, width, height):
@@ -52,7 +45,7 @@ class Window:
         self.editmode = self.ui.editmode.isChecked()
 
     def edit(self):
-        Thread(name="edit", target=self.__edit).start()
+        Thread(target=self.__edit).start()
 
     def __edit(self):
         try:
@@ -107,31 +100,42 @@ class Window:
         self.launchpad = self.ui.launchpadselection.currentIndex()
         self.changed = True
 
+    def __openconfig(self):
+        Thread(target=self.openconfig).start()
+
     def openconfig(self):
         try:
-            tmp = {}
-            for key, value in json.load(
-                    open(
-                        path.abspath(
-                            self.ui.configfile.text().replace("file://", "").replace("\r", "").replace("\n",
-                                                                                                       "")))).items():
-                tmp.update({
-                    key: value.append(AudioSegment(value[0]))
+            self.config.clear()
+            config = json.load(
+                open(
+                    path.abspath(
+                        self.ui.configfile.text().replace("file://", "").replace("\r", "").replace("\n", ""))))
+            # print(config)
+            for key, value in config.items():
+                if value[0] != "":
+                    value.append(AudioSegment.from_file(value[0]))
+                self.config.update({
+                    int(key): value
                 })
-            self.config = tmp
-            del tmp
-            Thread(name="setbutton", target=self.setbutton, args=[self.button]).start()
+            # print(self.config)
+            Thread(target=self.setbutton, args=[self.button]).start()
         except:
             pass
+
+    def __saveconfig(self):
+        Thread(target=self.saveconfig).start()
 
     def saveconfig(self):
         try:
             tmp = {}
-            for key, value in self.config:
+            for key, value in self.config.items():
+                # print(key, value)
+                # print(key, value[:-1])
+                value = value[:-1]
                 tmp.update({
-                    key: value[:-1]
+                    key: value
                 })
-            json.dump(self.config, open(
+            json.dump(tmp, open(
                 path.abspath(self.ui.configfile.text().replace("file://", "").replace("\r", "").replace("\n", "")),
                 "w"),
                       sort_keys=True)
@@ -139,8 +143,8 @@ class Window:
             pass
 
     def resetconfig(self):
-        self.config = {}
-        Thread(name="setbutton", target=self.setbutton, args=[self.button])
+        self.config.clear()
+        Thread(target=self.setbutton, args=[self.button]).start()
 
     @property
     def launchpads(self):
@@ -154,8 +158,6 @@ class Window:
         if button is not None:
             self.button = button
             self.ui.buttonnumber.setText(f"Button {button}")
-            # c = self.config.get(button, ["", 100.0, True, False])
-            # print(c[0])
             self.buttonchanged = True
             # NOTE:
             # Those are segmentation faults!
@@ -163,7 +165,6 @@ class Window:
             # self.ui.volume.setValue(c[1])
             # self.ui.activated.setChecked(c[2])
             # self.ui.replay.setChecked(c[3])
-
 
     @property
     def height(self):
@@ -187,6 +188,5 @@ class Window:
 if __name__ == "__main__":
     w = Window(640, 480)
     w.window.show()
-    # w.handler.start()
     exit(w.app.exec_())
     w.running = False

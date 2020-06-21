@@ -36,8 +36,8 @@ class Launchpad:
         self.blink = {}
         self.running = True
         self.isopen = False
-        self.handler = Thread(name="launchpadhandler", target=self.__handler)
-        self.led_handler = Thread(name="led_handler", target=self.__led_handler)
+        self.handler = Thread(target=self.__handler)
+        self.led_handler = Thread(target=self.__led_handler)
         self.setbutton = None
         self.action = None
 
@@ -69,8 +69,8 @@ class Launchpad:
                     if button is not None:
                         self.button = button[0] + (button[1] - 1) * 16
                         # print(self.button)
-                        Thread(name=self.button, target=self.action, args=[self.button]).start()
-                        Thread(name="setbutton", target=self.setbutton, args=[self.button]).start()
+                        Thread(target=self.action, args=[self.button]).start()
+                        Thread(target=self.setbutton, args=[self.button]).start()
                     sleep(0.01)
         except:
             exit(0)
@@ -99,6 +99,7 @@ class Launchpad:
                     pass
 
     def led(self, btn, c):
+        # print(c)
         if c[2]:
             try:
                 tmp = False
@@ -109,8 +110,8 @@ class Launchpad:
                             tmp = True
                             b = self.blink.get(btn, [1, 1])
                             # print(b)
-                            print(instance)
-                            print(b[0])
+                            # print(instance)
+                            # print(b[0])
                             if b[0] < time() - .5:
                                 if b[1] == 1:
                                     self.lp.LedCtrlRaw(btn, 3, 3)
