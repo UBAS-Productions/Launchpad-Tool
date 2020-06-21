@@ -1,5 +1,5 @@
 from threading import Thread
-from time import sleep
+from time import sleep, time
 
 from pydub.playback import _play_with_simpleaudio as play
 from simpleaudio.functionchecks import LeftRightCheck
@@ -62,10 +62,12 @@ class Audio(Thread):
         self.output = None
         self.src_audio = src_audio
         self.volume = volume
+        self.started = None
         self.start()
 
     def run(self):
         self.play()
+        self.started = time()
         while self.output.is_playing():
             if running:
                 sleep(0.1)
@@ -96,11 +98,22 @@ class Audio(Thread):
                 exit(0)
 
     @property
+    def time_left(self):
+        try:
+            if self.playing:
+                duration = len(self.src_audio) / 1000
+                left = duration - (time() - self.started)
+                return int(left)
+        except:
+            return None
+
+    @property
     def playing(self):
         try:
             return self.output.is_playing()
         except:
-            return False
+            pass
+        return False
 
     @property
     def volume(self):

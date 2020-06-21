@@ -20,12 +20,6 @@ def SearchDevices(name, output=True, input=True):
     return ret
 
 
-# TODO:
-#   JSON Settings
-#   Button press: Start/Stop
-#   Button hold: Loop/Unloop
-#   Button double press: Enable/Disable (maybe?)
-#   Window with time left for sound with activated TC
 class Launchpad:
     def __init__(self):
         self.lp = launchpad.Launchpad()
@@ -106,6 +100,7 @@ class Launchpad:
                 for instance in self.instances:
                     # print(instance, btn)
                     if instance[0] == btn and len(instance[1]) > 0:
+                        # print(instance[1][-1].time_left)
                         if instance[1][-1].playing:
                             tmp = True
                             b = self.blink.get(btn, [1, 1])

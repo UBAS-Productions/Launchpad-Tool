@@ -110,6 +110,7 @@ class Ui_window(object):
         self.buttonsettings.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_3)
         self.volume = QtWidgets.QDoubleSpinBox(self.horizontalLayoutWidget)
         self.volume.setMaximum(200.0)
+        self.volume.setMinimum(0.01)
         self.volume.setProperty("value", 100.0)
         self.volume.setObjectName("volume")
         self.buttonsettings.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.volume)

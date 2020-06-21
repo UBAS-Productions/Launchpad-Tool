@@ -2,6 +2,7 @@ import json
 from os import path
 from sys import argv, exit
 from threading import Thread
+from time import sleep
 
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
@@ -9,6 +10,7 @@ from PyQt5.QtWidgets import QApplication
 from pydub import AudioSegment
 
 from modules.ui import Ui_window
+from modules.ui2 import Ui_Form
 
 
 # TODO:
@@ -17,6 +19,7 @@ class Window:
     def __init__(self, width, height):
         self.app = QApplication(argv)
         self.window = QtWidgets.QMainWindow()
+        self.Form = QtWidgets.QWidget()
         self.ui = Ui_window()
         self.ui.setupUi(self.window)
         self.ui.launchpadselection.currentIndexChanged.connect(self.selectlaunchpad)
@@ -29,6 +32,8 @@ class Window:
         self.ui.activated.clicked.connect(self.edit)
         self.ui.replay.clicked.connect(self.edit)
         self.ui.editmode.clicked.connect(self.__editmode)
+        self.ui2 = Ui_Form()
+        self.ui2.setupUi(self.Form)
         self.config = {}
         self.changed = False
         self.button = 0
@@ -40,6 +45,32 @@ class Window:
         self.width = width
         self.height = height
         self.running = True
+        self.instances = []
+        self.overview_updater = Thread(target=self.__overview_updater)
+
+    def __overview_updater(self):
+        while self.running:
+            for i, frame in enumerate(self.ui2.frames):
+                x, y = i % 8, i // 8
+                btn = x + y * 16
+                c = self.config.get(btn, ["", 100.0, None])
+                # print(frame.styleSheet())
+                # if c[2]:
+                #     frame.setStyleSheet("background-color: green")
+                # elif c[2] is False:
+                #     frame.setStyleSheet("background-color: red")
+                audiofile = ".".join(path.basename(c[0]).split(".")[:-1])
+                timeleft = 0
+                for instance in self.instances:
+                    if btn in instance:
+                        if len(instance[1]) > 0:
+                            timeleft = instance[1][-1].time_left
+                # print(1)
+                self.ui2.labels_2[i].setText(str(timeleft))
+                # print(2)
+                self.ui2.labels_3[i].setText(str(audiofile))
+                # print(3)
+            sleep(0.15)
 
     def __editmode(self):
         self.editmode = self.ui.editmode.isChecked()
