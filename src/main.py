@@ -39,6 +39,7 @@ running = True
 # Window initialisation
 w = Window(640, 480)
 w.window.show()
+w.Form.show()
 # Launchpad initialisation
 lp = Launchpad()
 # Sync
@@ -48,6 +49,7 @@ lp.launchpad = w.launchpad
 lp.running = running
 audio.running = running
 lp.instances = audio.instances
+w.instances = audio.instances
 lp.action = audio.action
 lp.setbutton = w.setbutton
 audio.editmode = w.editmode
@@ -60,6 +62,7 @@ update = Thread(target=__update)
 update.start()
 lp.handler.start()
 lp.led_handler.start()
+w.overview_updater.start()
 # Exit on command
 try:
     exitcode = w.app.exec_()
