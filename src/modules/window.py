@@ -51,7 +51,7 @@ class Window:
     def __overview_updater(self):
         while self.running:
             for i, frame in enumerate(self.ui2.frames):
-                x, y = i % 8, i // 8
+                y, x = i % 8, i // 8
                 btn = x + y * 16
                 c = self.config.get(btn, ["", 100.0, None])
                 # print(frame.styleSheet())
