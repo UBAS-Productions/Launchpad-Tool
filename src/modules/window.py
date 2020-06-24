@@ -13,8 +13,6 @@ from modules.ui import Ui_window
 from modules.ui2 import Ui_Form
 
 
-# TODO:
-#   Buttonmatrix
 class Window:
     def __init__(self, width, height):
         self.app = QApplication(argv)
@@ -142,16 +140,32 @@ class Window:
                     path.abspath(
                         self.ui.configfile.text().replace("file://", "").replace("\r", "").replace("\n", ""))))
             # print(config)
-            for key, value in config.items():
-                if value[0] != "":
-                    value.append(AudioSegment.from_file(value[0]))
-                self.config.update({
-                    int(key): value
-                })
+            # for key, value in config.items():
+            #     if value[0] != "":
+            #         value.append(AudioSegment.from_file(value[0]))
+            #     self.config.update({
+            #         int(key): value
+            #     })
             # print(self.config)
+            threads = []
+            for key, value in config.items():
+                threads.append(Thread(target=self.openaudio, args=[key, value]))
+                threads[-1].start()
+            for t in threads:
+                t.join()
             Thread(target=self.setbutton, args=[self.button]).start()
         except:
             pass
+
+    def openaudio(self, key, value):
+        val = value
+        # print(key, value)
+        if value != ["", 100.0, True, False]:
+            if value[0] != "":
+                val.append(AudioSegment.from_file(value[0]))
+            self.config.update({
+                int(key): val
+            })
 
     def __saveconfig(self):
         Thread(target=self.saveconfig).start()
@@ -162,9 +176,9 @@ class Window:
             for key, value in self.config.items():
                 # print(key, value)
                 # print(key, value[:-1])
-                value = value[:-1]
+                val = value[:-1]
                 tmp.update({
-                    key: value
+                    key: val
                 })
             json.dump(tmp, open(
                 path.abspath(self.ui.configfile.text().replace("file://", "").replace("\r", "").replace("\n", "")),
@@ -188,8 +202,9 @@ class Window:
     def setbutton(self, button):
         if button is not None:
             self.button = button
-            self.ui.buttonnumber.setText(f"Button {button}")
+            self.ui.buttonnumber.setText("Button " + str(button))
             self.buttonchanged = True
+            # print(self.config)
             # NOTE:
             # Those are segmentation faults!
             # self.ui.audiofile.setText(c[0])
