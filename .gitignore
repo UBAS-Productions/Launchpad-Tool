@@ -5,3 +5,5 @@
 venv/
 #reference
 reference/
+#Cache
+src/modules/__pycache__
